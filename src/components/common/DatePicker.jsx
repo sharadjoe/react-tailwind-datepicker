@@ -13,6 +13,8 @@ import {
 import moment from "moment";
 import { momentObj } from "./utils";
 
+import { LeftPointer, RightPointer } from "./AppIcons";
+
 type DatepickerType = "date" | "month" | "year";
 
 export default function DatePicker() {
@@ -20,18 +22,21 @@ export default function DatePicker() {
   const [dayCount, setDayCount] = useState([]);
   const [blankDays, setBlankDays] = useState([]);
   const [showDatepicker, setShowDatepicker] = useState(false);
-  const [datepickerHeaderDate, setDatepickerHeaderDate] = useState(moment());
+  const [datePickerHeaderDate, setDatepickerHeaderDate] = useState(moment());
   const [selectedDate, setSelectedDate] = useState(moment());
   const [type, setType] = useState("date");
 
-  const decrement = () => {
-    switch (type) {
+  const decrement = (mode) => {
+    switch (mode ? mode : type) {
       case "date":
         setDatepickerHeaderDate((prev) => subMonths(prev, 1));
         break;
-      case "month":
-        setDatepickerHeaderDate((prev) => subYears(prev, 1));
+      case "month": {
+        setDatepickerHeaderDate(
+          moment(datePickerHeaderDate).subtract(1, "months")
+        );
         break;
+      }
       case "year":
         setDatepickerHeaderDate((prev) => subMonths(prev, 1));
         break;
@@ -41,14 +46,15 @@ export default function DatePicker() {
     }
   };
 
-  const increment = () => {
-    switch (type) {
+  const increment = (mode) => {
+    switch (mode ? mode : type) {
       case "date":
         setDatepickerHeaderDate((prev) => addMonths(prev, 1));
         break;
-      case "month":
-        setDatepickerHeaderDate((prev) => addYears(prev, 1));
+      case "month": {
+        setDatepickerHeaderDate(moment(datePickerHeaderDate).add(1, "months"));
         break;
+      }
       case "year":
         setDatepickerHeaderDate((prev) => subMonths(prev, 1));
         break;
@@ -77,8 +83,8 @@ export default function DatePicker() {
     //number
     setSelectedDate(
       new Date(
-        datepickerHeaderDate.getFullYear(),
-        datepickerHeaderDate.getMonth(),
+        datePickerHeaderDate.getFullYear(),
+        datePickerHeaderDate.getMonth(),
         date
       )
     );
@@ -118,9 +124,9 @@ export default function DatePicker() {
     // number
     setDatepickerHeaderDate(
       new Date(
-        datepickerHeaderDate.getFullYear(),
+        datePickerHeaderDate.getFullYear(),
         month,
-        datepickerHeaderDate.getDate()
+        datePickerHeaderDate.getDate()
       )
     );
     setType("date");
@@ -133,8 +139,8 @@ export default function DatePicker() {
   const showYearPicker = () => setType("date");
 
   useEffect(() => {
-    getDayCount(datepickerHeaderDate);
-  }, [datepickerHeaderDate]);
+    getDayCount(datePickerHeaderDate);
+  }, [datePickerHeaderDate]);
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-gray-200 ">
@@ -186,21 +192,11 @@ export default function DatePicker() {
                         <button
                           type="button"
                           className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
-                          onClick={decrement}
+                          onClick={() => {
+                            decrement("month");
+                          }}
                         >
-                          <svg
-                            className="h-6 w-6 text-gray-500 inline-flex"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 19l-7-7 7-7"
-                            />
-                          </svg>
+                          <LeftPointer />
                         </button>
                       </div>
                       {type === "date" && (
@@ -209,7 +205,7 @@ export default function DatePicker() {
                           className="flex-grow p-1 text-lg font-bold text-gray-800 cursor-pointer hover:bg-gray-200 rounded-lg"
                         >
                           <p className="text-center">
-                            {datepickerHeaderDate.format("MMMM")}
+                            {datePickerHeaderDate.format("MMMM")}
                           </p>
                         </div>
                       )}
@@ -218,28 +214,18 @@ export default function DatePicker() {
                         className="flex-grow p-1 text-lg font-bold text-gray-800 cursor-pointer hover:bg-gray-200 rounded-lg"
                       >
                         <p className="text-center">
-                          {datepickerHeaderDate.format("yyyy")}
+                          {datePickerHeaderDate.format("yyyy")}
                         </p>
                       </div>
                       <div>
                         <button
                           type="button"
                           className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
-                          onClick={increment}
+                          onClick={() => {
+                            increment("month");
+                          }}
                         >
-                          <svg
-                            className="h-6 w-6 text-gray-500 inline-flex"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
+                          <RightPointer />
                         </button>
                       </div>
                     </div>
@@ -306,9 +292,9 @@ export default function DatePicker() {
                               >
                                 {format(
                                   new Date(
-                                    datepickerHeaderDate.year(),
+                                    datePickerHeaderDate.year(),
                                     i,
-                                    datepickerHeaderDate.date()
+                                    datePickerHeaderDate.date()
                                   ),
                                   "MMM"
                                 )}
