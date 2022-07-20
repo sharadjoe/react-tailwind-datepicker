@@ -11,6 +11,7 @@ import {
 } from "date-fns";
 
 import moment from "moment";
+import { momentObj } from "./utils";
 
 type DatepickerType = "date" | "month" | "year";
 
@@ -19,8 +20,8 @@ export default function DatePicker() {
   const [dayCount, setDayCount] = useState([]);
   const [blankDays, setBlankDays] = useState([]);
   const [showDatepicker, setShowDatepicker] = useState(false);
-  const [datepickerHeaderDate, setDatepickerHeaderDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [datepickerHeaderDate, setDatepickerHeaderDate] = useState(moment());
+  const [selectedDate, setSelectedDate] = useState(moment());
   const [type, setType] = useState("date");
 
   const decrement = () => {
@@ -57,14 +58,20 @@ export default function DatePicker() {
     }
   };
 
-  const isToday = (date) =>
-    //number
-    {
-      isEqual(
-        new Date(selectedDate.getFullYear(), selectedDate.getMonth(), date),
-        selectedDate
-      );
-    };
+  const isToday = (date) => {
+    var formulatedDate = moment();
+    formulatedDate.set("year", selectedDate.year());
+    formulatedDate.set("month", selectedDate.month());
+    formulatedDate.set("date", date);
+
+    // let formulatedDate = new Date(
+    //   selectedDate.getFullYear(),
+    //   selectedDate.getMonth(),
+    //   date
+    // );
+
+    return moment(formulatedDate).isSame(selectedDate, "date");
+  };
 
   const setDateValue = (date) => () => {
     //number
@@ -80,10 +87,11 @@ export default function DatePicker() {
 
   const getDayCount = (date) => {
     // date
-    let daysInMonth = getDaysInMonth(date);
+    let daysInMonth = moment(date).daysInMonth();
 
     // find where to start calendar day of week
-    let dayOfWeek = getDay(new Date(date.getFullYear(), date.getMonth(), 1));
+
+    let dayOfWeek = momentObj(date.year(), date.month(), 1).weekday();
     let blankdaysArray = [];
     for (let i = 1; i <= dayOfWeek; i++) {
       blankdaysArray.push(i);
@@ -147,7 +155,7 @@ export default function DatePicker() {
                   readOnly
                   className="cursor-pointer w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium"
                   placeholder="Select date"
-                  value={format(selectedDate, "yyyy-MM-dd")}
+                  value={selectedDate.format("yyyy-MM-DD")}
                   onClick={toggleDatepicker}
                 />
                 <div
@@ -201,7 +209,7 @@ export default function DatePicker() {
                           className="flex-grow p-1 text-lg font-bold text-gray-800 cursor-pointer hover:bg-gray-200 rounded-lg"
                         >
                           <p className="text-center">
-                            {format(datepickerHeaderDate, "MMMM")}
+                            {datepickerHeaderDate.format("MMMM")}
                           </p>
                         </div>
                       )}
@@ -210,7 +218,7 @@ export default function DatePicker() {
                         className="flex-grow p-1 text-lg font-bold text-gray-800 cursor-pointer hover:bg-gray-200 rounded-lg"
                       >
                         <p className="text-center">
-                          {format(datepickerHeaderDate, "yyyy")}
+                          {datepickerHeaderDate.format("yyyy")}
                         </p>
                       </div>
                       <div>
@@ -298,9 +306,9 @@ export default function DatePicker() {
                               >
                                 {format(
                                   new Date(
-                                    datepickerHeaderDate.getFullYear(),
+                                    datepickerHeaderDate.year(),
                                     i,
-                                    datepickerHeaderDate.getDate()
+                                    datepickerHeaderDate.date()
                                   ),
                                   "MMM"
                                 )}
