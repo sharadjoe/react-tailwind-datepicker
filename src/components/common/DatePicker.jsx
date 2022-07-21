@@ -280,9 +280,9 @@ export default function DatePicker() {
                               >
                                 {momentObj(
                                   datePickerHeaderDate.date(),
-                                  i,
+                                  i + 1,
                                   datePickerHeaderDate.year()
-                                ).format("MMMM")}
+                                ).format("MMM")}
                               </div>
                             </div>
                           ))}
