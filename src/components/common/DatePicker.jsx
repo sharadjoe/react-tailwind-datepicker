@@ -5,8 +5,6 @@ import { momentObj } from "./utils";
 
 import { LeftPointer, RightPointer } from "./AppIcons";
 
-type DatepickerType = "date" | "month" | "year";
-
 export default function DatePicker() {
   const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const [dayCount, setDayCount] = useState([]);
@@ -78,11 +76,7 @@ export default function DatePicker() {
   const setDateValue = (date) => () => {
     //number
     setSelectedDate(
-      new Date(
-        datePickerHeaderDate.getFullYear(),
-        datePickerHeaderDate.getMonth(),
-        date
-      )
+      momentObj(date, datePickerHeaderDate.month(), datePickerHeaderDate.year())
     );
     setShowDatePicker(false);
   };
@@ -111,10 +105,10 @@ export default function DatePicker() {
   const setMonthValue = (month) => () => {
     // number
     setDatePickerHeaderDate(
-      new Date(
-        datePickerHeaderDate.getFullYear(),
-        month,
-        datePickerHeaderDate.getDate()
+      momentObj(
+        datePickerHeaderDate.date(),
+        month + 1,
+        datePickerHeaderDate.year()
       )
     );
     setType("date");
