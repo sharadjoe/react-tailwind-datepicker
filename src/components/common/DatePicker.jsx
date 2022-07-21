@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import moment from "moment";
-import { momentObj, isToday, isSelectedMonth } from "./utils";
+import { momentObj } from "./utils";
 
 import { LeftPointer, RightPointer } from "./AppIcons";
 
@@ -61,6 +61,18 @@ export default function DatePicker() {
         alert("invalid type ");
         break;
     }
+  };
+
+  const isToday = (date) => {
+    return moment(
+      new Date(selectedDate.year(), selectedDate.month(), date)
+    ).isSame(selectedDate, "day");
+  };
+
+  const isSelectedMonth = (month) => {
+    return moment(
+      new Date(selectedDate.year(), month, selectedDate.date())
+    ).isSame(selectedDate, "month");
   };
 
   const setDateValue = (date) => () => {
@@ -237,7 +249,7 @@ export default function DatePicker() {
                               <div
                                 onClick={setDateValue(d)}
                                 className={`cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 ${
-                                  isToday(d, selectedDate)
+                                  isToday(d)
                                     ? "bg-blue-500 text-white"
                                     : "text-gray-700 hover:bg-blue-200"
                                 }`}
@@ -261,7 +273,7 @@ export default function DatePicker() {
                             >
                               <div
                                 className={`cursor-pointer p-5 font-semibold text-center text-sm rounded-lg hover:bg-gray-200 ${
-                                  isSelectedMonth(i, selectedDate)
+                                  isSelectedMonth(i)
                                     ? "bg-blue-500 text-white"
                                     : "text-gray-700 hover:bg-blue-200"
                                 }`}
