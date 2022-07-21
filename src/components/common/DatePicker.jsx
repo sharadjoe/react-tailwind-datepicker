@@ -1,14 +1,4 @@
 import { useState, useEffect } from "react";
-import {
-  format,
-  subMonths,
-  addMonths,
-  subYears,
-  addYears,
-  isEqual,
-  getDaysInMonth,
-  getDay
-} from "date-fns";
 
 import moment from "moment";
 import { momentObj } from "./utils";
@@ -28,18 +18,25 @@ export default function DatePicker() {
 
   const decrement = (mode) => {
     switch (mode ? mode : type) {
-      case "date":
-        setDatepickerHeaderDate((prev) => subMonths(prev, 1));
+      case "date": {
+        setDatepickerHeaderDate(
+          moment(datePickerHeaderDate).subtract(1, "days")
+        );
         break;
+      }
+
       case "month": {
         setDatepickerHeaderDate(
           moment(datePickerHeaderDate).subtract(1, "months")
         );
         break;
       }
-      case "year":
-        setDatepickerHeaderDate((prev) => subMonths(prev, 1));
+      case "year": {
+        setDatepickerHeaderDate(
+          moment(datePickerHeaderDate).subtract(1, "years")
+        );
         break;
+      }
       default:
         alert("invalid type ");
         break;
@@ -48,16 +45,18 @@ export default function DatePicker() {
 
   const increment = (mode) => {
     switch (mode ? mode : type) {
-      case "date":
-        setDatepickerHeaderDate((prev) => addMonths(prev, 1));
+      case "date": {
+        setDatepickerHeaderDate(moment(datePickerHeaderDate).add(1, "days"));
         break;
+      }
       case "month": {
         setDatepickerHeaderDate(moment(datePickerHeaderDate).add(1, "months"));
         break;
       }
-      case "year":
-        setDatepickerHeaderDate((prev) => subMonths(prev, 1));
+      case "year": {
+        setDatepickerHeaderDate(moment(datePickerHeaderDate).add(1, "years"));
         break;
+      }
       default:
         alert("invalid type ");
         break;
@@ -65,18 +64,15 @@ export default function DatePicker() {
   };
 
   const isToday = (date) => {
-    var formulatedDate = moment();
-    formulatedDate.set("year", selectedDate.year());
-    formulatedDate.set("month", selectedDate.month());
-    formulatedDate.set("date", date);
+    return moment(
+      new Date(selectedDate.year(), selectedDate.month(), date)
+    ).isSame(selectedDate, "month");
+  };
 
-    // let formulatedDate = new Date(
-    //   selectedDate.getFullYear(),
-    //   selectedDate.getMonth(),
-    //   date
-    // );
-
-    return moment(formulatedDate).isSame(selectedDate, "date");
+  const isSelectedMonth = (month) => {
+    return moment(
+      new Date(selectedDate.year(), month, selectedDate.date())
+    ).isSame(selectedDate, "month");
   };
 
   const setDateValue = (date) => () => {
@@ -111,14 +107,6 @@ export default function DatePicker() {
     setBlankDays(blankdaysArray);
     setDayCount(daysArray);
   };
-
-  const isSelectedMonth = (
-    month // number
-  ) =>
-    isEqual(
-      new Date(selectedDate.getFullYear(), month, selectedDate.getDate()),
-      selectedDate
-    );
 
   const setMonthValue = (month) => () => {
     // number
@@ -290,14 +278,11 @@ export default function DatePicker() {
                                     : "text-gray-700 hover:bg-blue-200"
                                 }`}
                               >
-                                {format(
-                                  new Date(
-                                    datePickerHeaderDate.year(),
-                                    i,
-                                    datePickerHeaderDate.date()
-                                  ),
-                                  "MMM"
-                                )}
+                                {momentObj(
+                                  datePickerHeaderDate.date(),
+                                  i,
+                                  datePickerHeaderDate.year()
+                                ).format("MMMM")}
                               </div>
                             </div>
                           ))}
