@@ -175,7 +175,9 @@ export default function DatePicker() {
                           type="button"
                           className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
                           onClick={() => {
-                            decrement("month");
+                            type === "date"
+                              ? decrement("month")
+                              : decrement("year");
                           }}
                         >
                           <LeftPointer />
@@ -204,7 +206,9 @@ export default function DatePicker() {
                           type="button"
                           className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
                           onClick={() => {
-                            increment("month");
+                            type === "date"
+                              ? increment("month")
+                              : increment("year");
                           }}
                         >
                           <RightPointer />
