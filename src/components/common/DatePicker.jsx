@@ -11,28 +11,28 @@ export default function DatePicker() {
   const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const [dayCount, setDayCount] = useState([]);
   const [blankDays, setBlankDays] = useState([]);
-  const [showDatepicker, setShowDatepicker] = useState(false);
-  const [datePickerHeaderDate, setDatepickerHeaderDate] = useState(moment());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [datePickerHeaderDate, setDatePickerHeaderDate] = useState(moment());
   const [selectedDate, setSelectedDate] = useState(moment());
   const [type, setType] = useState("date");
 
   const decrement = (mode) => {
     switch (mode ? mode : type) {
       case "date": {
-        setDatepickerHeaderDate(
+        setDatePickerHeaderDate(
           moment(datePickerHeaderDate).subtract(1, "days")
         );
         break;
       }
 
       case "month": {
-        setDatepickerHeaderDate(
+        setDatePickerHeaderDate(
           moment(datePickerHeaderDate).subtract(1, "months")
         );
         break;
       }
       case "year": {
-        setDatepickerHeaderDate(
+        setDatePickerHeaderDate(
           moment(datePickerHeaderDate).subtract(1, "years")
         );
         break;
@@ -46,15 +46,15 @@ export default function DatePicker() {
   const increment = (mode) => {
     switch (mode ? mode : type) {
       case "date": {
-        setDatepickerHeaderDate(moment(datePickerHeaderDate).add(1, "days"));
+        setDatePickerHeaderDate(moment(datePickerHeaderDate).add(1, "days"));
         break;
       }
       case "month": {
-        setDatepickerHeaderDate(moment(datePickerHeaderDate).add(1, "months"));
+        setDatePickerHeaderDate(moment(datePickerHeaderDate).add(1, "months"));
         break;
       }
       case "year": {
-        setDatepickerHeaderDate(moment(datePickerHeaderDate).add(1, "years"));
+        setDatePickerHeaderDate(moment(datePickerHeaderDate).add(1, "years"));
         break;
       }
       default:
@@ -84,7 +84,7 @@ export default function DatePicker() {
         date
       )
     );
-    setShowDatepicker(false);
+    setShowDatePicker(false);
   };
 
   const getDayCount = (date) => {
@@ -110,7 +110,7 @@ export default function DatePicker() {
 
   const setMonthValue = (month) => () => {
     // number
-    setDatepickerHeaderDate(
+    setDatePickerHeaderDate(
       new Date(
         datePickerHeaderDate.getFullYear(),
         month,
@@ -120,7 +120,7 @@ export default function DatePicker() {
     setType("date");
   };
 
-  const toggleDatepicker = () => setShowDatepicker((prev) => !prev);
+  const toggleDatepicker = () => setShowDatePicker((prev) => !prev);
 
   const showMonthPicker = () => setType("month");
 
@@ -170,7 +170,7 @@ export default function DatePicker() {
                     />
                   </svg>
                 </div>
-                {showDatepicker && (
+                {showDatePicker && (
                   <div
                     className="bg-white mt-12 rounded-lg shadow p-4 absolute top-0 left-0"
                     style={{ width: "17rem" }}
