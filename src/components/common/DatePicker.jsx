@@ -194,8 +194,8 @@ export default function DatePicker() {
                         </div>
                       )}
                       <div
-                        onClick={showYearPicker}
-                        className="flex-grow p-1 text-lg font-bold text-gray-800 cursor-pointer hover:bg-gray-200 rounded-lg"
+                        onClick={showMonthPicker}
+                        className="flex-grow p-1 text-lg font-bold text-gray-800 rounded-lg"
                       >
                         <p className="text-center">
                           {datePickerHeaderDate.format("yyyy")}
